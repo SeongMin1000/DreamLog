@@ -1,4 +1,6 @@
 package com.example.dreamlog.model
 
-class User {
-}
+data class User(
+    val userEmail: String = "",
+    val createdAt: Long = 0L
+)
