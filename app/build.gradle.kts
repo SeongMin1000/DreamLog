@@ -43,6 +43,7 @@ android {
 }
 
 dependencies {
+    implementation ("com.google.android.material:material:1.11.0")
     implementation ("com.github.divyanshub024:AndroidDraw:v0.1")
     implementation ("org.tensorflow:tensorflow-lite:2.7.0")
     implementation ("org.tensorflow:tensorflow-lite-support:0.3.0")

@@ -30,14 +30,26 @@ class LoginActivity : AppCompatActivity() {
         val errorText = findViewById<TextView>(R.id.textError)
 
         loginBtn.setOnClickListener {
-            val email = emailEdit.text.toString()
-            val password = passwordEdit.text.toString()
+            val email = emailEdit.text.toString().trim()
+            val password = passwordEdit.text.toString().trim()
+
+            if (email.isEmpty() || password.isEmpty()) {
+                errorText.text = "이메일과 비밀번호를 모두 입력하세요."
+                return@setOnClickListener
+            }
+
             signIn(email, password, errorText)
         }
 
         signupBtn.setOnClickListener {
-            val email = emailEdit.text.toString()
-            val password = passwordEdit.text.toString()
+            val email = emailEdit.text.toString().trim()
+            val password = passwordEdit.text.toString().trim()
+
+            if (email.isEmpty() || password.isEmpty()) {
+                errorText.text = "이메일과 비밀번호를 모두 입력하세요."
+                return@setOnClickListener
+            }
+
             signUp(email, password, errorText)
         }
     }
@@ -65,7 +77,6 @@ class LoginActivity : AppCompatActivity() {
                     val user = auth.currentUser
                     val uid = user?.uid ?: return@addOnCompleteListener
 
-                    // ✅ User 클래스 객체로 사용자 정보 생성
                     val userData = com.example.dreamlog.model.User(
                         userEmail = email,
                         createdAt = System.currentTimeMillis()
