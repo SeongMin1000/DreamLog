@@ -4,13 +4,17 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import com.example.dreamlog.R
 
 abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, true)
         setStatusBarTextColor()
     }
 
