@@ -2,9 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAFAFA"
-    android:fitsSystemWindows="true"
-    >
+    android:background="@color/bg_screen"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +18,7 @@
             android:text="DreamLog"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="#212121"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="32dp" />
 
         <EditText
@@ -30,8 +29,8 @@
             android:background="@drawable/bg_input_rounded"
             android:paddingHorizontal="16dp"
             android:inputType="textEmailAddress"
-            android:textColor="#000000"
-            android:textColorHint="#999999"
+            android:textColor="@color/text_input"
+            android:textColorHint="@color/text_hint"
             android:layout_marginBottom="16dp" />
 
         <EditText
@@ -42,8 +41,8 @@
             android:background="@drawable/bg_input_rounded"
             android:paddingHorizontal="16dp"
             android:inputType="textPassword"
-            android:textColor="#000000"
-            android:textColorHint="#999999"
+            android:textColor="@color/text_input"
+            android:textColorHint="@color/text_hint"
             android:layout_marginBottom="24dp" />
 
         <Button
@@ -53,7 +52,7 @@
             android:text="로그인"
             android:textAllCaps="false"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/button_primary_text"
             android:background="@drawable/bg_btn_primary"
             android:layout_marginBottom="12dp" />
 
@@ -63,7 +62,7 @@
             android:layout_height="48dp"
             android:text="회원가입"
             android:textAllCaps="false"
-            android:textColor="#6200EE"
+            android:textColor="@color/button_secondary_text"
             android:background="@drawable/bg_btn_outline"
             android:layout_marginBottom="16dp" />
 
@@ -71,7 +70,7 @@
             android:id="@+id/textError"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FF3B30"
+            android:textColor="@color/text_error"
             android:textSize="14sp"
             android:paddingTop="8dp"
             android:text=""
