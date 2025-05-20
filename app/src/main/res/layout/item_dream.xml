@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/input_background">
+    android:background="@color/white_black_input_bg">
 
     <!-- 꿈 내용 -->
     <TextView
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Sample Dream"
         android:textSize="16sp"
-        android:textColor="@color/text_input"/>
+        android:textColor="@color/black_white_input_text"/>
 
     <!-- 감정 -->
     <TextView
@@ -22,5 +22,5 @@
         android:layout_height="wrap_content"
         android:text="Happy"
         android:textSize="14sp"
-        android:textColor="@color/text_input"/>
+        android:textColor="@color/black_white_input_text"/>
 </LinearLayout>
