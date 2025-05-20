@@ -2,16 +2,16 @@ package com.example.dreamlog.viewmodel
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import com.example.dreamlog.R
+import com.example.dreamlog.model.User
 
 // firebaseDB 사용
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class LoginActivity : AppCompatActivity() {
+
+class LoginActivity : BaseActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
@@ -77,7 +77,7 @@ class LoginActivity : AppCompatActivity() {
                     val user = auth.currentUser
                     val uid = user?.uid ?: return@addOnCompleteListener
 
-                    val userData = com.example.dreamlog.model.User(
+                    val userData = User(
                         userEmail = email,
                         createdAt = System.currentTimeMillis()
                     )
