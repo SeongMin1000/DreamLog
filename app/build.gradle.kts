@@ -17,6 +17,17 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        val key = project.rootProject.file("local.properties")
+            .reader()
+            .useLines { lines ->
+                lines.firstOrNull { it.startsWith("openai.api.key=") }
+                    ?.substringAfter("=")
+                    ?.trim()
+            } ?: "키없음"
+
+        println("✅ 불러온 키: $key")
+
+        buildConfigField("String", "OPENAI_API_KEY", "\"$key\"")
     }
 
     buildTypes {
@@ -39,10 +50,25 @@ android {
         compose = true
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
+    packagingOptions {
+        resources {
+            excludes += "**/*.tflite"
+        }
+    }
+
 }
 
 dependencies {
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // OkHttp 로깅 (선택)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    // 코루틴 (비동기 처리)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation ("com.google.android.material:material:1.11.0")
     implementation ("com.github.divyanshub024:AndroidDraw:v0.1")
     implementation ("org.tensorflow:tensorflow-lite:2.7.0")

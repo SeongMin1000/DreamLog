@@ -13,7 +13,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
+import com    .google.firebase.firestore.Query
 
 class MainActivity : BaseActivity() {
 
@@ -45,14 +45,16 @@ class MainActivity : BaseActivity() {
         binding.recyclerView.adapter = adapter
 
         // Firestore에서 꿈 목록 불러오기
-        loadDreamsFromFirestore()
+        listenForDreamUpdates()
 
         // DrawerAdapter 연동
         binding.navigationView.setNavigationItemSelectedListener(DrawerAdapter(this))
 
         // 꿈 작성 화면으로 이동
         binding.fabAddDream.setOnClickListener {
+            val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return@setOnClickListener
             val intent = Intent(this, DreamWriteActivity::class.java)
+            intent.putExtra("uid", uid) // ✅ uid 넣기
             startActivity(intent)
         }
     }
@@ -66,18 +68,26 @@ class MainActivity : BaseActivity() {
     }
 
     // Firestore에서 꿈 목록 가져오기
-    private fun loadDreamsFromFirestore() {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+    private fun listenForDreamUpdates() {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
         val db = FirebaseFirestore.getInstance()
-        db.collection("users").document(userId).collection("dreams")
+
+        db.collection("users").document(uid).collection("dreams")
             .orderBy("timestamp", Query.Direction.DESCENDING)
-            .get()
-            .addOnSuccessListener { result ->
-                dreamList.clear()
-                for (document in result) {
-                    val dream = document.toObject(Dream::class.java)
-                    dreamList.add(dream)
+            .addSnapshotListener { snapshots, error ->
+                if (error != null || snapshots == null) return@addSnapshotListener
+
+                val updatedList = mutableListOf<Dream>()
+                for (doc in snapshots.documents) {
+                    val dream = doc.toObject(Dream::class.java)
+                    if (dream != null) {
+                        updatedList.add(dream)
+                    }
                 }
+
+                // 최신 상태로 전체 교체
+                dreamList.clear()
+                dreamList.addAll(updatedList)
                 adapter.notifyDataSetChanged()
             }
     }
