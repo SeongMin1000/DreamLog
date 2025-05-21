@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- 📌 카메라 권한 추가 -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,6 +18,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DreamLog"
         tools:targetApi="31">
+
+        <!-- 📌 FileProvider 등록 (카메라 사진 저장용) -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <!-- 앱의 시작점: LoginActivity -->
         <activity
@@ -25,14 +42,16 @@
             </intent-filter>
         </activity>
 
-        <!-- MainActivity는 로그인 후 진입 -->
+        <!-- MainActivity: 로그인 후 진입 -->
         <activity
             android:name=".viewmodel.MainActivity"
             android:exported="true" />
-<!--        <activity-->
-<!--            android:name=".viewmodel.DreamWriteActivity" />-->
+
+        <!-- 📌 DreamWriteActivity: 꿈 입력 액티비티 -->
+        <activity
+            android:name=".viewmodel.DreamWriteActivity"
+            android:exported="false" />
 
     </application>
-
 
 </manifest>
