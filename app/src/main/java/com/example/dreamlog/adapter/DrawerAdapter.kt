@@ -27,11 +27,9 @@ class DrawerAdapter(
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.menu_logout -> {
-                FirebaseAuth.getInstance().signOut()
-                context.startActivity(Intent(context, LoginActivity::class.java))
-                true
-            }
+            R.id.menu_home -> { /* 홈 처리 */ true }
+            R.id.menu_settings -> { /* 설정 처리 */ true }
+            // menu_logout은 NavigationView 메뉴에서만 관리
             else -> false
         }
     }
