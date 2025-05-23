@@ -2,6 +2,7 @@ package com.example.dreamlog.viewmodel
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,9 +52,20 @@ class MainActivity : BaseActivity() {
 
         // 꿈 작성 화면으로 이동
         fabAddDream.setOnClickListener {
+            val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return@setOnClickListener
             val intent = Intent(this, DreamWriteActivity::class.java)
+            intent.putExtra("uid", uid) // uid 전달
             startActivity(intent)
         }
+
+        // 로그아웃 버튼 drawerAdapter에서 제외
+        val logoutBtn = findViewById<Button>(R.id.menu_logout)
+        logoutBtn.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
+
     }
 
 
@@ -62,15 +74,24 @@ class MainActivity : BaseActivity() {
     private fun loadDreamsFromFirestore() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
         val db = FirebaseFirestore.getInstance()
+
         db.collection("users").document(userId).collection("dreams")
             .orderBy("timestamp", Query.Direction.DESCENDING)
-            .get()
-            .addOnSuccessListener { result ->
-                dreamList.clear()
-                for (document in result) {
-                    val dream = document.toObject(com.example.dreamlog.model.Dream::class.java)
-                    dreamList.add(dream)
+            // db 실시간 동기화
+            .addSnapshotListener { snapshots, error ->
+                if (error != null || snapshots == null) return@addSnapshotListener
+
+                val updatedList = mutableListOf<Dream>()
+                for (doc in snapshots.documents) {
+                    val dream = doc.toObject(Dream::class.java)
+                    if (dream != null) {
+                        updatedList.add(dream)
+                    }
                 }
+
+                // 최신 상태로 전체 교체
+                dreamList.clear()
+                dreamList.addAll(updatedList)
                 adapter.notifyDataSetChanged()
             }
     }
