@@ -2,15 +2,12 @@ package com.example.dreamlog.viewmodel
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dreamlog.R
-import com.example.dreamlog.adapter.DrawerAdapter
 import com.example.dreamlog.adapter.DreamAdapter
-import com.example.dreamlog.adapter.ToolbarAdapter
 import com.example.dreamlog.model.Dream
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
@@ -33,12 +30,9 @@ class MainActivity : BaseActivity() {
         val navigationView = findViewById<NavigationView>(R.id.navigationView)
         val fabAddDream = findViewById<FloatingActionButton>(R.id.fabAddDream)
 
-
-        // 툴바 + 햄버거 메뉴 설정
-        ToolbarAdapter(this, toolbar, drawerLayout)
-
-        // 드로어 어댑터 설정 및 색상 적용
-        DrawerAdapter(this, navigationView)
+        // 툴바 및 네비바 불러오기
+        setupToolbarAndDrawer(toolbar, drawerLayout, navigationView)
+        setupLogoutButton()
 
         // 리사이클러뷰 설정
         adapter = DreamAdapter(dreamList)
@@ -57,15 +51,6 @@ class MainActivity : BaseActivity() {
             intent.putExtra("uid", uid) // uid 전달
             startActivity(intent)
         }
-
-        // 로그아웃 버튼 drawerAdapter에서 제외
-        val logoutBtn = findViewById<Button>(R.id.menu_logout)
-        logoutBtn.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-        }
-
     }
 
 
