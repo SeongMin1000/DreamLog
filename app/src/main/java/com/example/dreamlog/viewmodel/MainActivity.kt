@@ -2,6 +2,7 @@ package com.example.dreamlog.viewmodel
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,6 +55,15 @@ class MainActivity : BaseActivity() {
             val intent = Intent(this, DreamWriteActivity::class.java)
             startActivity(intent)
         }
+
+        // 로그아웃 버튼 drawerAdapter에서 제외
+        val logoutBtn = findViewById<Button>(R.id.menu_logout)
+        logoutBtn.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
+
     }
 
 
