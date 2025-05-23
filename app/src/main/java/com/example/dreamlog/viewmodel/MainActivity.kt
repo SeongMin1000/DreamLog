@@ -52,7 +52,9 @@ class MainActivity : BaseActivity() {
 
         // 꿈 작성 화면으로 이동
         fabAddDream.setOnClickListener {
+            val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return@setOnClickListener
             val intent = Intent(this, DreamWriteActivity::class.java)
+            intent.putExtra("uid", uid) // uid 전달
             startActivity(intent)
         }
 
@@ -72,15 +74,24 @@ class MainActivity : BaseActivity() {
     private fun loadDreamsFromFirestore() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
         val db = FirebaseFirestore.getInstance()
+
         db.collection("users").document(userId).collection("dreams")
             .orderBy("timestamp", Query.Direction.DESCENDING)
-            .get()
-            .addOnSuccessListener { result ->
-                dreamList.clear()
-                for (document in result) {
-                    val dream = document.toObject(com.example.dreamlog.model.Dream::class.java)
-                    dreamList.add(dream)
+            // db 실시간 동기화
+            .addSnapshotListener { snapshots, error ->
+                if (error != null || snapshots == null) return@addSnapshotListener
+
+                val updatedList = mutableListOf<Dream>()
+                for (doc in snapshots.documents) {
+                    val dream = doc.toObject(Dream::class.java)
+                    if (dream != null) {
+                        updatedList.add(dream)
+                    }
                 }
+
+                // 최신 상태로 전체 교체
+                dreamList.clear()
+                dreamList.addAll(updatedList)
                 adapter.notifyDataSetChanged()
             }
     }
