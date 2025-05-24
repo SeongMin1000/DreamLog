@@ -36,7 +36,7 @@
             app:tint="@color/white_black_background" />
     </LinearLayout>
 
-    <!-- 내비게이션 드로어 부분은 include로 대체! -->
+    <!-- 내비바 불러오기 -->
     <include layout="@layout/drawer_layout" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
