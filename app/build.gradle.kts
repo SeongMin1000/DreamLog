@@ -3,8 +3,12 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.services)
+<<<<<<< HEAD
     id("kotlin-kapt") // ✅ 이렇게 써야 인식됨
     //id("org.jetbrains.kotlin.kapt") // ✅ 추가
+=======
+    id("org.jetbrains.kotlin.kapt")
+>>>>>>> origin/main
 }
 
 android {
@@ -79,6 +83,7 @@ dependencies {
 
     // 코루틴 (비동기 처리)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
     implementation ("com.google.android.material:material:1.11.0")
     implementation ("com.github.divyanshub024:AndroidDraw:v0.1")
     implementation ("org.tensorflow:tensorflow-lite:2.7.0")
