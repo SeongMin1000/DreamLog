@@ -50,10 +50,16 @@
             android:name=".viewmodel.MainActivity"
             android:exported="true" />
 
-        <!-- 📌 DreamWriteActivity: 꿈 입력 액티비티 -->
+        <!-- DreamWriteActivity: 꿈 입력 액티비티 -->
         <activity
             android:name=".viewmodel.DreamWriteActivity"
             android:exported="false" />
+
+        <!-- DreamWriteActivity: 결과창 -->
+        <activity
+            android:name=".viewmodel.ResultActivity"
+            android:exported="false"/>
+
 
     </application>
 
