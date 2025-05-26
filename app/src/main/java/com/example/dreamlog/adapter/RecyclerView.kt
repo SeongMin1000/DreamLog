@@ -10,7 +10,10 @@ import com.example.dreamlog.model.Dream
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DreamAdapter(private val dreams: List<Dream>) : RecyclerView.Adapter<DreamAdapter.DreamViewHolder>() {
+class DreamAdapter(
+    private val dreams: List<Dream>,
+    private val onItemLongClick: (Dream, Int) -> Unit
+) : RecyclerView.Adapter<DreamAdapter.DreamViewHolder>() {
 
     class DreamViewHolder(val binding: ItemDreamBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -52,6 +55,12 @@ class DreamAdapter(private val dreams: List<Dream>) : RecyclerView.Adapter<Dream
                     .into(imageDream)
             } else {
                 imageDream.visibility = View.GONE
+            }
+
+            // 길게 눌러 수정 삭제
+            root.setOnLongClickListener {
+                onItemLongClick(dream, position)
+                true
             }
         }
     }
