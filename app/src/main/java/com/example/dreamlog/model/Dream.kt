@@ -3,6 +3,7 @@ package com.example.dreamlog.model
 import com.google.firebase.Timestamp
 
 data class Dream(
+    var id: String = "",                  // 꿈 id
     val dreamText: String = "",           // 꿈 내용
     val emotion: String = "",             // 감정 분석 결과
     val gptInterpretation: String = "",   // gpt 분석 결과

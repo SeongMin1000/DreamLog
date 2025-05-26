@@ -87,9 +87,12 @@ class MainActivity : BaseActivity() {
                 for (doc in snapshots.documents) {
                     val dream = doc.toObject(Dream::class.java)
                     if (dream != null) {
+                        // 꿈 id 추가
+                        dream.id = doc.id
                         updatedList.add(dream)
                     }
                 }
+
 
                 // 최신 상태로 전체 교체
                 dreamList.clear()
@@ -105,12 +108,10 @@ class MainActivity : BaseActivity() {
 
         // Firestore에서 삭제
         db.collection("users").document(userId)
-            .collection("dreams").document(dream.timestamp.toString()) // (여기 key는 실제로 저장할 때의 doc id로 맞춰야 함)
+            .collection("dreams").document(dream.id) // 자동 생성된 dream id 찾아서 삭제
             .delete()
             .addOnSuccessListener {
-                // 로컬 리스트에서 제거하고 새로고침
-                dreamList.removeAt(position)
-                adapter.notifyItemRemoved(position)
+                // 실시간 동기화 자동 반영
             }
             .addOnFailureListener {
                 // 실패시 에러 표시
