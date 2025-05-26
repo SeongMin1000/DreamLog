@@ -35,7 +35,9 @@ class MainActivity : BaseActivity() {
         setupLogoutButton()
 
         // 리사이클러뷰 설정
-        adapter = DreamAdapter(dreamList)
+        adapter = DreamAdapter(dreamList) { dream, position ->
+            showEditDeleteDialog(dream, position)
+        }
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
@@ -53,6 +55,21 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    // RecyclerView 각 항목 수정 삭제
+    private fun showEditDeleteDialog(dream: Dream, position: Int) {
+        val options = arrayOf("수정", "삭제")
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("선택")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> { /* 수정 로직 (추후 구현) */ }
+                    1 -> { // 삭제
+                        deleteDreamFromFirestore(dream, position)
+                    }
+                }
+            }
+            .show()
+    }
 
 
     // Firestore에서 꿈 목록 가져오기
@@ -78,6 +95,26 @@ class MainActivity : BaseActivity() {
                 dreamList.clear()
                 dreamList.addAll(updatedList)
                 adapter.notifyDataSetChanged()
+            }
+    }
+
+    // fireBase 꿈 삭제
+    private fun deleteDreamFromFirestore(dream: Dream, position: Int) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val db = FirebaseFirestore.getInstance()
+
+        // Firestore에서 삭제
+        db.collection("users").document(userId)
+            .collection("dreams").document(dream.timestamp.toString()) // (여기 key는 실제로 저장할 때의 doc id로 맞춰야 함)
+            .delete()
+            .addOnSuccessListener {
+                // 로컬 리스트에서 제거하고 새로고침
+                dreamList.removeAt(position)
+                adapter.notifyItemRemoved(position)
+            }
+            .addOnFailureListener {
+                // 실패시 에러 표시
+                android.widget.Toast.makeText(this, "삭제 실패", android.widget.Toast.LENGTH_SHORT).show()
             }
     }
 }

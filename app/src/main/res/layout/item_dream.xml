@@ -90,11 +90,10 @@
         <!-- 우측: 이미지 -->
         <ImageView
             android:id="@+id/imageDream"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.2"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:layout_marginStart="16dp"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             android:background="#E9E9F5"
             android:clipToOutline="true"
             android:visibility="gone"/>
