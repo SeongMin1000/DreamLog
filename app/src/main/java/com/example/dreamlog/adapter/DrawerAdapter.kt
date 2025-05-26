@@ -9,6 +9,7 @@ import com.example.dreamlog.viewmodel.LoginActivity
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import androidx.core.content.ContextCompat
+import com.example.dreamlog.viewmodel.MainActivity
 
 class DrawerAdapter(
     private val context: Context,
@@ -27,9 +28,16 @@ class DrawerAdapter(
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.menu_home -> { /* 홈 처리 */ true }
+            R.id.menu_home -> {
+                // 홈 처리
+                val intent = Intent(context, MainActivity::class.java)
+                // 이미 MainActivity면 새로 쌓이지 않게 플래그 추가
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                context.startActivity(intent)
+                true
+            }
             R.id.menu_settings -> { /* 설정 처리 */ true }
-            // menu_logout은 NavigationView 메뉴에서만 관리
+            // 로그아웃은 BaseActicity에서 처리
             else -> false
         }
     }
