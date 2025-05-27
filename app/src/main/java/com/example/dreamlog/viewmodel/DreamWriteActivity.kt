@@ -3,7 +3,6 @@ package com.example.dreamlog.viewmodel
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.widget.Toast
@@ -11,24 +10,40 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.dreamlog.R
+import com.example.dreamlog.api.GptRetrofitInstance
+import com.example.dreamlog.api.ImageGenRetrofitInstance
+import com.example.dreamlog.api.preprocessDreamText
 import com.example.dreamlog.databinding.ActivityDreamWriteBinding
+import com.example.dreamlog.model.ChatRequest
+import com.example.dreamlog.model.Dream
+import com.example.dreamlog.model.ImageGenerationRequest
+import com.example.dreamlog.model.Message
+import com.example.dreamlog.util.EmotionAnalyzer
 import com.example.dreamlog.util.camera.CameraHelper
 import com.google.android.material.navigation.NavigationView
-import java.io.File
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class DreamWriteActivity : BaseActivity() {
 
     private lateinit var binding: ActivityDreamWriteBinding
     private lateinit var cameraLauncher: ActivityResultLauncher<Intent>
     private lateinit var cameraPermissionLauncher: ActivityResultLauncher<String>
-    private var photoFile: File? = null
-    private var imageBitmap: Bitmap? = null
+    private var photoPath: String? = null
+    private var imageBitmap: android.graphics.Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDreamWriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // 감정 분석 모델 초기화
+        EmotionAnalyzer.initModel(this)
 
         // 툴바 및 네비게이션 설정
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -42,7 +57,7 @@ class DreamWriteActivity : BaseActivity() {
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
             if (isGranted) {
-                photoFile = CameraHelper.dispatchTakePictureIntent(this, cameraLauncher)
+                photoPath = CameraHelper.dispatchTakePictureIntent(this, cameraLauncher)?.absolutePath
             } else {
                 Toast.makeText(this, "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
             }
@@ -50,14 +65,11 @@ class DreamWriteActivity : BaseActivity() {
 
         // 카메라 실행 런처
         cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            val path = CameraHelper.getCurrentPhotoPath()
-            if (path != null) {
-                val rawBitmap = BitmapFactory.decodeFile(path)
-                val correctedBitmap = CameraHelper.rotateBitmapIfRequired(path, rawBitmap)
-                imageBitmap = correctedBitmap
-                // 미리보기 용도 (적당한 크기로)
-                val previewBitmap = Bitmap.createScaledBitmap(correctedBitmap, 200, 200, true)
-                binding.imagePreview.setImageBitmap(previewBitmap)
+            photoPath = CameraHelper.getCurrentPhotoPath()
+            if (photoPath != null) {
+                val rawBitmap = BitmapFactory.decodeFile(photoPath!!)
+                val correctedBitmap = CameraHelper.rotateBitmapIfRequired(photoPath!!, rawBitmap)
+                binding.imagePreview.setImageBitmap(correctedBitmap)
             } else {
                 Toast.makeText(this, "이미지를 불러올 수 없습니다", Toast.LENGTH_SHORT).show()
             }
@@ -67,26 +79,109 @@ class DreamWriteActivity : BaseActivity() {
         binding.btnOpenCamera.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED) {
-                photoFile = CameraHelper.dispatchTakePictureIntent(this, cameraLauncher)
+                photoPath = CameraHelper.dispatchTakePictureIntent(this, cameraLauncher)?.absolutePath
             } else {
                 cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
             }
         }
 
-        // "다음" 버튼 (ResultActivity로 이동)
+        // 결과 보기(다음) 버튼
         binding.btnNext.setOnClickListener {
             val dreamText = binding.editDream.text.toString().trim()
-            if (dreamText.isBlank() || photoFile == null) {
-                Toast.makeText(this, "꿈을 입력하고 사진을 찍어주세요!", Toast.LENGTH_SHORT).show()
+
+            if (dreamText.isBlank()) {
+                Toast.makeText(this, "꿈 내용을 입력하세요!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            // ResultActivity로 꿈 텍스트와 이미지 경로 전달
-            val intent = Intent(this, ResultActivity::class.java).apply {
-                putExtra("dreamText", dreamText)
-                putExtra("photoPath", photoFile!!.absolutePath)
+            if (photoPath.isNullOrBlank()) {
+                Toast.makeText(this, "셀카를 먼저 찍어주세요!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
-            startActivity(intent)
-            finish()
+
+
+            Toast.makeText(this, "생성 중...", Toast.LENGTH_SHORT).show()
+
+            // 로딩 표시 + 전체 터치 차단
+            binding.progressBar.visibility = android.view.View.VISIBLE
+            binding.blockTouchView?.visibility = android.view.View.VISIBLE
+            binding.btnNext.isEnabled = false
+
+            lifecycleScope.launch {
+                try {
+                    // 1. 감정 분석
+                    var emotionResult = ""
+                    if (photoPath != null) {
+                        val rawBitmap = BitmapFactory.decodeFile(photoPath!!)
+                        emotionResult = EmotionAnalyzer.analyze(rawBitmap)
+                    }
+
+                    // 2. GPT 해석
+                    var gptResult = ""
+                    if (dreamText.isNotBlank()) {
+                        val userDream = preprocessDreamText(dreamText)
+                        val request = ChatRequest(
+                            messages = listOf(
+                                Message(role = "system", content = "너는 꿈 해석 전문가야. 사용자가 말한 꿈을 심리학적으로 분석해서 의미를 설명해줘. 100자 이내로."),
+                                Message(role = "user", content = userDream)
+                            )
+                        )
+                        val response = GptRetrofitInstance.api.getChatCompletion(request)
+                        gptResult = response.choices.firstOrNull()?.message?.content ?: ""
+                    }
+
+                    // 3. 이미지 생성(GPT 프롬프트 → 이미지 생성 API)
+                    val promptRequest = ChatRequest(
+                        messages = listOf(
+                            Message(
+                                role = "system",
+                                content = "너는 이미지 디자이너야. 사용자가 입력한 꿈의 심리적 해석과 감정을 바탕으로 이미지 생성 AI에 넣을 프롬프트 문장을 만들어줘. 핵심만 요약해서 최대한 짧은 문장으로."
+                            ),
+                            Message(
+                                role = "user",
+                                content = "감정: $emotionResult\n해석: $gptResult\n이 내용을 이미지로 형상화할 수 있는 프롬프트를 영어로 작성해줘. 묘사 중심으로."
+                            )
+                        )
+                    )
+                    val promptResponse = GptRetrofitInstance.api.getChatCompletion(promptRequest)
+                    val imagePrompt = promptResponse.choices.firstOrNull()?.message?.content ?: ""
+                    val imageResponse = ImageGenRetrofitInstance.api.generateImage(
+                        ImageGenerationRequest(prompt = imagePrompt)
+                    )
+                    val imageUrl = imageResponse.data.firstOrNull()?.url ?: ""
+
+                    // 4. Firestore에 결과 저장
+                    val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return@launch
+                    val db = FirebaseFirestore.getInstance()
+                    val docRef = db.collection("users").document(uid).collection("dreams").document()
+                    val docId = docRef.id
+                    val dream = Dream(
+                        dreamText = dreamText,
+                        emotion = emotionResult,
+                        gptInterpretation = gptResult,
+                        imageUrl = imageUrl,
+                        timestamp = com.google.firebase.Timestamp.now()
+                    )
+                    docRef.set(dream).await()
+
+                    // 5. 모든 작업 완료 후 결과화면 이동
+                    val intent = Intent(this@DreamWriteActivity, ResultActivity::class.java).apply {
+                        putExtra("emotion", emotionResult)
+                        putExtra("gptResult", gptResult)
+                        putExtra("imageUrl", imageUrl)
+                    }
+                    startActivity(intent)
+                    finish()
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(this@DreamWriteActivity, "분석 또는 생성 실패: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
+                } finally {
+                    // 로딩 해제 + 전체 터치 해제
+                    binding.progressBar.visibility = android.view.View.GONE
+                    binding.blockTouchView?.visibility = android.view.View.GONE
+                    binding.btnNext.isEnabled = true
+                }
+            }
         }
     }
 }
