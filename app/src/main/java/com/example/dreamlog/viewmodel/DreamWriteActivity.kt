@@ -59,14 +59,17 @@ class DreamWriteActivity : BaseActivity() {
         }
 
         // 카메라 실행 런처
-        cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             photoPath = CameraHelper.getCurrentPhotoPath()
-            if (photoPath != null) {
+            // 카메라 실행 후 사진 촬영하지 않고 뒤로가기 시 에러 처리
+            if (result.resultCode == RESULT_OK && photoPath != null) {
                 val rawBitmap = BitmapFactory.decodeFile(photoPath!!)
                 val correctedBitmap = CameraHelper.rotateBitmapIfRequired(photoPath!!, rawBitmap)
                 binding.imagePreview.setImageBitmap(correctedBitmap)
             } else {
                 Toast.makeText(this, "이미지를 불러올 수 없습니다", Toast.LENGTH_SHORT).show()
+                binding.imagePreview.setImageDrawable(null)
+                photoPath = null
             }
         }
 
