@@ -5,9 +5,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.view.MenuItem
 import com.example.dreamlog.R
-import com.example.dreamlog.viewmodel.LoginActivity
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.FirebaseAuth
 import androidx.core.content.ContextCompat
 import com.example.dreamlog.viewmodel.MainActivity
 

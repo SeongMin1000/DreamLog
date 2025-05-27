@@ -17,17 +17,12 @@ import com.example.dreamlog.api.ImageGenRetrofitInstance
 import com.example.dreamlog.api.preprocessDreamText
 import com.example.dreamlog.databinding.ActivityDreamWriteBinding
 import com.example.dreamlog.model.ChatRequest
-import com.example.dreamlog.model.Dream
 import com.example.dreamlog.model.ImageGenerationRequest
 import com.example.dreamlog.model.Message
 import com.example.dreamlog.util.EmotionAnalyzer
 import com.example.dreamlog.util.camera.CameraHelper
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 class DreamWriteActivity : BaseActivity() {
 
@@ -134,11 +129,18 @@ class DreamWriteActivity : BaseActivity() {
                         messages = listOf(
                             Message(
                                 role = "system",
-                                content = "너는 이미지 디자이너야. 사용자가 입력한 꿈의 심리적 해석과 감정을 바탕으로 이미지 생성 AI에 넣을 프롬프트 문장을 만들어줘. 핵심만 요약해서 최대한 짧은 문장으로."
+                                content = """
+                                            너는 이미지 디자이너야.
+                                            사용자의 꿈 해석과 감정에 어울리는 
+                                            'YouTube Music Recap' 스타일 + '몽환적(dreamy, surreal, ethereal)' 느낌의 일러스트 프롬프트를 만들어줘.
+                                            - 감정과 해석을 추상적으로 시각화
+                                            - 팝아트적 요소와 몽환적인 분위기 강조
+                                            영어 한 문장으로 묘사 위주로 작성
+                                        """.trimIndent()
                             ),
                             Message(
                                 role = "user",
-                                content = "감정: $emotionResult\n해석: $gptResult\n이 내용을 이미지로 형상화할 수 있는 프롬프트를 영어로 작성해줘. 묘사 중심으로."
+                                content = "감정: $emotionResult\n해석: $gptResult\n이 내용을 이미지로 형상화할 수 있는 프롬프트를 영어로 작성해줘."
                             )
                         )
                     )
