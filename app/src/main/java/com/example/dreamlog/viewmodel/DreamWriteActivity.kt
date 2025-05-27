@@ -149,28 +149,17 @@ class DreamWriteActivity : BaseActivity() {
                     )
                     val imageUrl = imageResponse.data.firstOrNull()?.url ?: ""
 
-                    // 4. Firestore에 결과 저장
-                    val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return@launch
-                    val db = FirebaseFirestore.getInstance()
-                    val docRef = db.collection("users").document(uid).collection("dreams").document()
-                    val docId = docRef.id
-                    val dream = Dream(
-                        dreamText = dreamText,
-                        emotion = emotionResult,
-                        gptInterpretation = gptResult,
-                        imageUrl = imageUrl,
-                        timestamp = com.google.firebase.Timestamp.now()
-                    )
-                    docRef.set(dream).await()
-
                     // 5. 모든 작업 완료 후 결과화면 이동
-                    val intent = Intent(this@DreamWriteActivity, ResultActivity::class.java).apply {
-                        putExtra("emotion", emotionResult)
-                        putExtra("gptResult", gptResult)
-                        putExtra("imageUrl", imageUrl)
+                    // 결과 화면에서 뒤로 가기 시 메인 화면으로 이동하는 현상 방지
+                    if (!this@DreamWriteActivity.isFinishing && !this@DreamWriteActivity.isDestroyed) {
+                        val intent = Intent(this@DreamWriteActivity, ResultActivity::class.java).apply {
+                            putExtra("dreamText", dreamText)
+                            putExtra("emotion", emotionResult)
+                            putExtra("gptResult", gptResult)
+                            putExtra("imageUrl", imageUrl)
+                        }
+                        startActivity(intent)
                     }
-                    startActivity(intent)
-                    finish()
 
                 } catch (e: Exception) {
                     e.printStackTrace()
