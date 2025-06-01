@@ -35,9 +35,17 @@ class MainActivity : BaseActivity() {
         setupLogoutButton()
 
         // 리사이클러뷰 설정
-        adapter = DreamAdapter(dreamList) { dream, position ->
-            showEditDeleteDialog(dream, position)
-        }
+        // 어댑터 설정 (클릭 시 ResultActivity로 이동)
+        adapter = DreamAdapter(
+            dreamList,
+            onItemClick = { dream ->
+                showDreamDetail(dream)
+            },
+            onItemLongClick = { dream, position ->
+                showEditDeleteDialog(dream, position)
+            }
+        )
+
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
@@ -53,6 +61,16 @@ class MainActivity : BaseActivity() {
             intent.putExtra("uid", uid) // uid 전달
             startActivity(intent)
         }
+    }
+    private fun showDreamDetail(dream: Dream) {
+        val intent = Intent(this, ResultActivity::class.java).apply {
+            putExtra("dreamText", dream.dreamText)
+            putExtra("emotion", dream.emotion)
+            putExtra("gptResult", dream.gptInterpretation)
+            putExtra("imageUrl", dream.imageUrl)
+            putExtra("fromMain", true) // ✅ 출처 플래그 전달
+        }
+        startActivity(intent)
     }
 
     // RecyclerView 각 항목 수정 삭제

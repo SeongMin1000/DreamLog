@@ -33,6 +33,12 @@ class ResultActivity : BaseActivity() {
         val emotion = intent.getStringExtra("emotion") ?: ""
         val gptResult = intent.getStringExtra("gptResult") ?: ""
         val imageUrl = intent.getStringExtra("imageUrl") ?: ""
+        val fromMain = intent.getBooleanExtra("fromMain", false)
+        if (fromMain) {
+            binding.btnSave.isEnabled = false
+            binding.btnSave.alpha = 0.5f // 흐리게 표시 (선택)
+            binding.btnSave.text = "저장됨" // 버튼 텍스트 변경
+        }
 
         // UI 표시
         binding.textEmotionResult.text = "감정 분석 결과: $emotion"

@@ -10,6 +10,11 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- 이미지 URL 권한 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Android 13 이상 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <!-- Android 12 이하 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 
     <application
         android:allowBackup="true"
@@ -59,6 +64,16 @@
         <activity
             android:name=".viewmodel.ResultActivity"
             android:exported="false"/>
+
+        <!-- ProfileActivity -->
+        <activity
+            android:name=".viewmodel.ProfileActivity"
+            android:exported="false" />
+
+        <!-- EditProfileActivity -->
+        <activity
+            android:name=".viewmodel.EditProfileActivity"
+            android:exported="false" />
 
 
     </application>
