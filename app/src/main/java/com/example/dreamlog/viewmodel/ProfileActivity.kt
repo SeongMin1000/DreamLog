@@ -37,6 +37,10 @@ class ProfileActivity : BaseActivity() {
 
         loadUserProfile()
     }
+    override fun onResume() {
+        super.onResume()
+        loadUserProfile()  // Firestore에서 최신 정보 다시 가져오는 함수
+    }
 
     private fun loadUserProfile() {
         if (uid == null) return
