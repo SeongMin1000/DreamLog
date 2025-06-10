@@ -75,13 +75,11 @@ class MainActivity : BaseActivity() {
 
     // RecyclerView 각 항목 수정 삭제
     private fun showEditDeleteDialog(dream: Dream, position: Int) {
-        val options = arrayOf("수정", "삭제")
+        val options = arrayOf( "삭제")
         androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("선택")
             .setItems(options) { _, which ->
                 when (which) {
-                    0 -> { /* 수정 로직 (추후 구현) */ }
-                    1 -> { // 삭제
+                    0 -> { // 삭제
                         deleteDreamFromFirestore(dream, position)
                     }
                 }
