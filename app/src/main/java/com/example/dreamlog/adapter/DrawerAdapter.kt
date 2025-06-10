@@ -39,6 +39,7 @@ class DrawerAdapter(
 
             R.id.menu_profile -> {
                 val intent = Intent(context, ProfileActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 context.startActivity(intent)
                 true
             }
