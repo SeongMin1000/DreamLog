@@ -41,7 +41,7 @@ class ResultActivity : BaseActivity() {
         }
 
         // UI 표시
-        binding.textEmotionResult.text = "감정 분석 결과: $emotion"
+        binding.textEmotionResult.text = "$emotion"
         binding.textGptResult.text = if (gptResult.isNotBlank()) gptResult else "GPT 해석 결과가 없습니다."
         if (imageUrl.isNotBlank()) {
             Glide.with(this)
