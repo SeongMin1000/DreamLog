@@ -49,6 +49,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- SignupActivity: 회원가입화면 -->
+        <activity
+            android:name=".viewmodel.SignupActivity"
+            android:exported="false" />
 
         <!-- MainActivity: 로그인 후 진입 -->
         <activity
