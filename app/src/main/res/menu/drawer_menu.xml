@@ -5,15 +5,11 @@
         <item
             android:id="@+id/menu_home"
             android:title="홈"
-            android:icon="@android:drawable/ic_menu_view"/>
-        <item
-            android:id="@+id/menu_settings"
-            android:title="설정"
-            android:icon="@android:drawable/ic_menu_manage"/>
+            android:icon="@drawable/ic_home_view"/>
         <item
             android:id="@+id/menu_profile"
             android:title="프로필"
-            android:icon="@android:drawable/ic_menu_myplaces"/>
+            android:icon="@drawable/ic_profile_view"/>
 
     </group>
 

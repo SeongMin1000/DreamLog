@@ -35,7 +35,6 @@ class DrawerAdapter(
                 context.startActivity(intent)
                 true
             }
-            R.id.menu_settings -> { /* 설정 처리 */ true }
 
             R.id.menu_profile -> {
                 val intent = Intent(context, ProfileActivity::class.java)
