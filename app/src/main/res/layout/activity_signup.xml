@@ -1,6 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_black_background"
+    android:fitsSystemWindows="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="회원가입"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="@color/black_white_text"
+            android:layout_marginBottom="32dp" />
+
+        <!-- 이메일 -->
+        <EditText
+            android:id="@+id/editSignupEmail"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="이메일"
+            android:background="@drawable/bg_input_rounded"
+            android:paddingHorizontal="16dp"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/black_white_input_text"
+            android:textColorHint="@color/gray_gray_hint_text"
+            android:layout_marginBottom="16dp" />
+
+        <!-- 비밀번호 -->
+        <EditText
+            android:id="@+id/editSignupPassword"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="비밀번호"
+            android:background="@drawable/bg_input_rounded"
+            android:paddingHorizontal="16dp"
+            android:inputType="textPassword"
+            android:textColor="@color/black_white_input_text"
+            android:textColorHint="@color/gray_gray_hint_text"
+            android:layout_marginBottom="16dp" />
+
+        <!-- 이름 -->
+        <EditText
+            android:id="@+id/editSignupName"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="이름"
+            android:background="@drawable/bg_input_rounded"
+            android:paddingHorizontal="16dp"
+            android:inputType="textPersonName"
+            android:textColor="@color/black_white_input_text"
+            android:textColorHint="@color/gray_gray_hint_text"
+            android:layout_marginBottom="16dp" />
+
+        <EditText
+            android:id="@+id/editSignupPhone"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="연락처"
+            android:background="@drawable/bg_input_rounded"
+            android:paddingHorizontal="16dp"
+            android:inputType="phone"
+            android:textColor="@color/black_white_input_text"
+            android:textColorHint="@color/gray_gray_hint_text"
+            android:layout_marginBottom="24dp" />
+
+        <!-- 한 줄 소개 -->
+        <EditText
+            android:id="@+id/editSignupComment"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="한 줄 소개"
+            android:background="@drawable/bg_input_rounded"
+            android:paddingHorizontal="16dp"
+            android:inputType="textCapSentences"
+            android:textColor="@color/black_white_input_text"
+            android:textColorHint="@color/gray_gray_hint_text"
+            android:layout_marginBottom="24dp" />
+
+        <!-- 버튼 -->
+        <Button
+            android:id="@+id/btnSignupSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="회원가입 완료"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="@color/white_black_button_text"
+            android:background="@drawable/bg_btn_primary"
+            android:layout_marginBottom="16dp" />
+
+        <!-- 에러 메시지 -->
+        <TextView
+            android:id="@+id/textSignupError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red_red_error_text"
+            android:textSize="14sp"
+            android:paddingTop="8dp"
+            android:text=""
+            android:gravity="center" />
+    </LinearLayout>
+</ScrollView>
