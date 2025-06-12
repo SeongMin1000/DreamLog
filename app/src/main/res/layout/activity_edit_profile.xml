@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white_black_background">
+
+            <!-- 툴바 -->
+            <include layout="@layout/toolbar" />
+
+            <TextView
+                android:id="@+id/textEditTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="프로필 수정"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@color/black_white_text"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp" />
+
+            <!-- 프로필 이미지 선택 -->
+            <ImageView
+                android:id="@+id/imageProfileEdit"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_profile_default"
+                android:background="@drawable/circle_background"
+                android:scaleType="centerCrop"
+                android:layout_marginBottom="20dp" />
+
+            <!-- 이름 입력 -->
+            <EditText
+                android:id="@+id/editName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="이름"
+                android:padding="12dp"
+                android:layout_marginHorizontal="24dp"
+                android:background="@drawable/bg_input_rounded" />
+
+            <!-- 한줄 소개 입력 -->
+            <EditText
+                android:id="@+id/editComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="한줄 소개"
+                android:padding="12dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_input_rounded" />
+
+            <!-- 저장/취소 버튼 -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp">
+
+
+
+                <Button
+                    android:id="@+id/btnCancel"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="취소"
+                    android:textAllCaps="false"
+                    android:background="@drawable/bg_btn_outline"
+                    android:textColor="@color/purple_purple_accent_text"
+                    android:layout_marginStart="8dp" />
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="저장"
+                    android:textAllCaps="false"
+                    android:background="@drawable/bg_btn_primary"
+                    android:textColor="@color/white_black_button_text"
+                    android:layout_marginEnd="8dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 드로어 메뉴 포함 -->
+        <include layout="@layout/drawer_layout" />
+    </androidx.drawerlayout.widget.DrawerLayout>
+</layout>

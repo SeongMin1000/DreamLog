@@ -8,6 +8,7 @@ import com.example.dreamlog.R
 import com.google.android.material.navigation.NavigationView
 import androidx.core.content.ContextCompat
 import com.example.dreamlog.viewmodel.MainActivity
+import com.example.dreamlog.viewmodel.ProfileActivity
 
 class DrawerAdapter(
     private val context: Context,
@@ -35,6 +36,13 @@ class DrawerAdapter(
                 true
             }
             R.id.menu_settings -> { /* 설정 처리 */ true }
+
+            R.id.menu_profile -> {
+                val intent = Intent(context, ProfileActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                context.startActivity(intent)
+                true
+            }
             // 로그아웃은 BaseActicity에서 처리
             else -> false
         }

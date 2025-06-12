@@ -64,11 +64,16 @@ android {
 }
 
 dependencies {
+
+    // Firebase Storage 추가 (이미지/파일 업로드용)
+    //implementation("com.google.firebase:firebase-storage-ktx:20.1.0")  // Firebase Storage KTX 라이브러리
+
     //workmanager
     implementation("androidx.work:work-runtime-ktx:2.9.0")
 
     //glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation(libs.firebase.storage.ktx)
     kapt("com.github.bumptech.glide:compiler:4.16.0")
 
     //retrofit

@@ -12,6 +12,7 @@ import java.util.*
 
 class DreamAdapter(
     private val dreams: List<Dream>,
+    private val onItemClick: (Dream) -> Unit,
     private val onItemLongClick: (Dream, Int) -> Unit
 ) : RecyclerView.Adapter<DreamAdapter.DreamViewHolder>() {
 
@@ -56,6 +57,11 @@ class DreamAdapter(
             } else {
                 imageDream.visibility = View.GONE
             }
+            // ⭐ 단순 클릭 이벤트 추가
+            root.setOnClickListener {
+                onItemClick(dream)
+            }
+
 
             // 길게 눌러 수정 삭제
             root.setOnLongClickListener {

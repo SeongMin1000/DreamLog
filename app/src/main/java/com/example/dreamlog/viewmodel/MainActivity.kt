@@ -35,9 +35,17 @@ class MainActivity : BaseActivity() {
         setupLogoutButton()
 
         // 리사이클러뷰 설정
-        adapter = DreamAdapter(dreamList) { dream, position ->
-            showEditDeleteDialog(dream, position)
-        }
+        // 어댑터 설정 (클릭 시 ResultActivity로 이동)
+        adapter = DreamAdapter(
+            dreamList,
+            onItemClick = { dream ->
+                showDreamDetail(dream)
+            },
+            onItemLongClick = { dream, position ->
+                showEditDeleteDialog(dream, position)
+            }
+        )
+
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
@@ -54,16 +62,24 @@ class MainActivity : BaseActivity() {
             startActivity(intent)
         }
     }
+    private fun showDreamDetail(dream: Dream) {
+        val intent = Intent(this, ResultActivity::class.java).apply {
+            putExtra("dreamText", dream.dreamText)
+            putExtra("emotion", dream.emotion)
+            putExtra("gptResult", dream.gptInterpretation)
+            putExtra("imageUrl", dream.imageUrl)
+            putExtra("fromMain", true) // ✅ 출처 플래그 전달
+        }
+        startActivity(intent)
+    }
 
     // RecyclerView 각 항목 수정 삭제
     private fun showEditDeleteDialog(dream: Dream, position: Int) {
-        val options = arrayOf("수정", "삭제")
+        val options = arrayOf( "삭제")
         androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("선택")
             .setItems(options) { _, which ->
                 when (which) {
-                    0 -> { /* 수정 로직 (추후 구현) */ }
-                    1 -> { // 삭제
+                    0 -> { // 삭제
                         deleteDreamFromFirestore(dream, position)
                     }
                 }
