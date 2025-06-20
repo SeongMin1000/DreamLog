@@ -73,8 +73,8 @@ class DreamWriteActivity : BaseActivity() {
             }
         }
 
-        // 셀카 찍기 버튼
-        binding.btnOpenCamera.setOnClickListener {
+        // 셀카 찍기
+        binding.imagePreview.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED) {
                 photoPath = CameraHelper.dispatchTakePictureIntent(this, cameraLauncher)?.absolutePath
@@ -82,6 +82,7 @@ class DreamWriteActivity : BaseActivity() {
                 cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
             }
         }
+
 
         // 결과 보기(다음) 버튼
         binding.btnNext.setOnClickListener {

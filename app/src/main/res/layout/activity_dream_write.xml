@@ -24,63 +24,68 @@
                 <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fillViewport="true">
+                    android:fillViewport="true"
+                    android:scrollbarThumbVertical="@android:color/transparent">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center_horizontal"
-                        android:padding="32dp">
+                        android:orientation="vertical">
 
                         <!-- 타이틀 -->
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="오늘의 꿈 기록"
-                            android:textSize="22sp"
+                            android:textSize="24sp"
                             android:textStyle="bold"
                             android:textColor="@color/black_white_text"
-                            android:layout_marginBottom="8dp"
+                            android:gravity="center"
+                            android:layout_marginTop="24dp"
+                            android:layout_marginBottom="12dp"
+                            android:layout_marginHorizontal="20dp"
                             android:accessibilityHeading="true" />
 
                         <!-- 안내문구 -->
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="떠오르는 꿈을 간단히 입력하고 셀카로 감정도 남겨보세요."
-                            android:textSize="14sp"
+                            android:textSize="15sp"
                             android:textColor="@color/gray_gray_hint_text"
-                            android:layout_marginBottom="16dp"
                             android:gravity="center"
+                            android:layout_marginBottom="28dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginHorizontal="20dp"
+                            android:lineSpacingExtra="4dp"
                             android:importantForAccessibility="yes"/>
 
                         <!-- 셀카 미리보기 -->
-                        <FrameLayout
-                            android:layout_width="220dp"
-                            android:layout_height="220dp"
-                            android:background="#F6F8FB"
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="280dp"
+                            android:layout_height="280dp"
                             android:layout_gravity="center"
-                            android:clipToOutline="true"
-                            android:elevation="2dp"
-                            android:outlineProvider="background"
-                            android:layout_marginBottom="20dp">
+                            android:layout_marginBottom="8dp"
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="4dp"
+                            app:cardBackgroundColor="#F6F8FB">
 
                             <ImageView
                                 android:id="@+id/imagePreview"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:scaleType="fitCenter"
+                                android:scaleType="centerCrop"
                                 android:background="@android:color/transparent"
                                 android:contentDescription="사진 미리보기"
-                                android:clipToOutline="true"/>
-                        </FrameLayout>
+                                android:clickable="true"
+                                android:focusable="true"/>
+                        </androidx.cardview.widget.CardView>
 
                         <!-- 입력창 -->
                         <EditText
                             android:id="@+id/editDream"
                             android:layout_width="match_parent"
-                            android:layout_height="120dp"
+                            android:layout_height="200dp"
                             android:hint="꿈을 입력하세요..."
                             android:textColorHint="@color/gray_gray_hint_text"
                             android:textColor="@color/black_white_input_text"
@@ -88,50 +93,41 @@
                             android:padding="14dp"
                             android:textSize="16sp"
                             android:background="@drawable/bg_input_rounded"
-                            android:layout_marginTop="0dp"
-                            android:layout_marginBottom="24dp"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginBottom="25dp"
                             android:outlineProvider="background"
                             android:clipToOutline="true"
                             android:inputType="textMultiLine"
-                            android:maxLines="8"
+                            android:maxLines="12"
                             android:backgroundTintMode="src_in"
                             android:contentDescription="꿈 입력창"
                             style="@android:style/Widget.EditText" />
 
-                        <!-- 셀카 찍기-->
-                        <Button
-                            android:id="@+id/btnOpenCamera"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:text="셀카 찍기"
-                            android:textAllCaps="false"
-                            android:background="@drawable/bg_btn_outline"
-                            android:textColor="@color/purple_purple_accent_text"
-                            android:textSize="16sp"
-                            android:padding="0dp"
-                            android:elevation="0dp"
-                            android:stateListAnimator="@null"
-                            android:clipToOutline="true"
-                            android:layout_marginBottom="10dp"
-                            android:contentDescription="셀카 찍기 버튼"/>
-
                         <!-- 결과 보기 버튼 -->
-                        <Button
-                            android:id="@+id/btnNext"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:text="결과 보기"
-                            android:textAllCaps="false"
-                            android:textSize="16sp"
-                            android:background="@drawable/bg_btn_primary"
-                            android:textColor="@color/white_black_button_text"
-                            android:layout_marginTop="0dp"
-                            android:elevation="2dp"
-                            android:clipToOutline="true"
-                            android:stateListAnimator="@null"
-                            android:padding="0dp"
-                            android:contentDescription="결과 보기 버튼"
-                            style="@android:style/Widget.Button" />
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="20dp"
+                            android:paddingBottom="32dp">
+
+                            <Button
+                                android:id="@+id/btnNext"
+                                android:layout_width="match_parent"
+                                android:layout_height="56dp"
+                                android:text="결과 보기"
+                                android:textAllCaps="false"
+                                android:textSize="16sp"
+                                android:background="@drawable/bg_btn_primary"
+                                android:textColor="@color/white_black_button_text"
+                                android:elevation="2dp"
+                                android:clipToOutline="true"
+                                android:stateListAnimator="@null"
+                                android:padding="0dp"
+                                android:contentDescription="결과 보기 버튼"
+                                style="@android:style/Widget.Button" />
+                        </LinearLayout>
 
                     </LinearLayout>
                 </ScrollView>
