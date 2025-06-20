@@ -91,11 +91,11 @@ class ResultActivity : BaseActivity() {
             try {
                 val calendarIntent = Intent(Intent.ACTION_INSERT)
                 calendarIntent.data = CalendarContract.Events.CONTENT_URI
-                calendarIntent.putExtra(CalendarContract.Events.TITLE, "꿈 기록 - $emotion")
+                calendarIntent.putExtra(CalendarContract.Events.TITLE, "($emotion) - $dreamText")
                 calendarIntent.putExtra(CalendarContract.Events.DESCRIPTION, gptResult)
                 calendarIntent.putExtra(
                     CalendarContract.Events.EVENT_LOCATION,
-                    "Dreamlog 앱"
+                    "Dreamlog"
                 )
                 // 바로 오늘 날짜, 일정 시간(1시간)으로 등록
                 val startMillis = System.currentTimeMillis()
