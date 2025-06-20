@@ -66,9 +66,19 @@ class DreamWriteActivity : BaseActivity() {
                 val rawBitmap = BitmapFactory.decodeFile(photoPath!!)
                 val correctedBitmap = CameraHelper.rotateBitmapIfRequired(photoPath!!, rawBitmap)
                 binding.imagePreview.setImageBitmap(correctedBitmap)
+                binding.imagePreview.setImageTintList(null)
+                binding.imagePreview.scaleType = android.widget.ImageView.ScaleType.CENTER_CROP
+                binding.imagePreview.setPadding(0, 0, 0, 0)
             } else {
                 Toast.makeText(this, "이미지를 불러올 수 없습니다", Toast.LENGTH_SHORT).show()
-                binding.imagePreview.setImageDrawable(null)
+                val cameraDrawable = ContextCompat.getDrawable(this, R.drawable.ic_camera)
+                binding.imagePreview.setImageDrawable(cameraDrawable)
+                binding.imagePreview.setImageTintList(android.content.res.ColorStateList.valueOf(ContextCompat.getColor(this, R.color.gray_gray_hint_text)))
+                // XML의 원래 설정으로 복원 (fitCenter, 90dp padding)
+                binding.imagePreview.scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+                val paddingPx = (90 * resources.displayMetrics.density).toInt()
+                binding.imagePreview.setPadding(paddingPx, paddingPx, paddingPx, paddingPx)
+                binding.imagePreview.invalidate()  // 뷰 강제 갱신
                 photoPath = null
             }
         }
