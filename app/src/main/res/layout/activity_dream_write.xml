@@ -24,93 +24,79 @@
                 <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fillViewport="true"
-                    android:scrollbarThumbVertical="@android:color/transparent">
-
+                    android:fillViewport="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:gravity="center_horizontal"
-                        android:paddingHorizontal="24dp"
-                        android:paddingVertical="32dp">
+                        android:padding="32dp">
 
                         <!-- 타이틀 -->
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="오늘의 꿈 기록"
-                            android:textSize="24sp"
+                            android:textSize="22sp"
                             android:textStyle="bold"
                             android:textColor="@color/black_white_text"
-                            android:layout_marginBottom="12dp"/>
+                            android:layout_marginBottom="8dp"
+                            android:accessibilityHeading="true" />
 
                         <!-- 안내문구 -->
                         <TextView
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="떠오르는 꿈을 간단히 입력하고 셀카로 감정도 남겨보세요."
-                            android:textSize="15sp"
+                            android:textSize="14sp"
                             android:textColor="@color/gray_gray_hint_text"
-                            android:layout_marginBottom="28dp"
+                            android:layout_marginBottom="16dp"
                             android:gravity="center"
-                            android:lineSpacingExtra="4dp"/>
+                            android:importantForAccessibility="yes"/>
 
                         <!-- 셀카 미리보기 -->
-                        <!-- 셀카 미리보기 - 개선된 디자인 -->
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="280dp"
-                            android:layout_height="280dp"
+                        <FrameLayout
+                            android:layout_width="220dp"
+                            android:layout_height="220dp"
+                            android:background="#F6F8FB"
                             android:layout_gravity="center"
-                            android:layout_marginBottom="32dp"
-                            app:cardCornerRadius="16dp"
-                            app:cardElevation="4dp">
+                            android:clipToOutline="true"
+                            android:elevation="2dp"
+                            android:outlineProvider="background"
+                            android:layout_marginBottom="20dp">
 
                             <ImageView
                                 android:id="@+id/imagePreview"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:scaleType="centerCrop"
-                                android:background="@color/white_black_input_bg"
-                                android:contentDescription="사진 미리보기"/>
-
-                            <!-- 카메라 아이콘 오버레이 (이미지가 없을 때만 표시) -->
-                            <!-- 카메라 아이콘으로 변경 필요 -->
-                            <ImageView
-                                android:id="@+id/cameraIcon"
-                                android:layout_width="64dp"
-                                android:layout_height="64dp"
-                                android:layout_gravity="center"
-                                android:src="@drawable/ic_profile_default"
-                                android:alpha="0.5"
-                                android:contentDescription="카메라 아이콘"/>
-                        </androidx.cardview.widget.CardView>
+                                android:scaleType="fitCenter"
+                                android:background="@android:color/transparent"
+                                android:contentDescription="사진 미리보기"
+                                android:clipToOutline="true"/>
+                        </FrameLayout>
 
                         <!-- 입력창 -->
-                        <androidx.cardview.widget.CardView
+                        <EditText
+                            android:id="@+id/editDream"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="32dp"
-                            app:cardCornerRadius="12dp"
-                            app:cardElevation="2dp">
-
-                            <EditText
-                                android:id="@+id/editDream"
-                                android:layout_width="match_parent"
-                                android:layout_height="140dp"
-                                android:hint="꿈을 입력하세요..."
-                                android:textColorHint="@color/gray_gray_hint_text"
-                                android:textColor="@color/black_white_input_text"
-                                android:gravity="top|start"
-                                android:padding="16dp"
-                                android:textSize="16sp"
-                                android:background="@null"
-                                android:inputType="textMultiLine"
-                                android:maxLines="8"
-                                android:importantForAutofill="no"/>
-                        </androidx.cardview.widget.CardView>
-
+                            android:layout_height="120dp"
+                            android:hint="꿈을 입력하세요..."
+                            android:textColorHint="@color/gray_gray_hint_text"
+                            android:textColor="@color/black_white_input_text"
+                            android:gravity="top|start"
+                            android:padding="14dp"
+                            android:textSize="16sp"
+                            android:background="@drawable/bg_input_rounded"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginBottom="24dp"
+                            android:outlineProvider="background"
+                            android:clipToOutline="true"
+                            android:inputType="textMultiLine"
+                            android:maxLines="8"
+                            android:backgroundTintMode="src_in"
+                            android:contentDescription="꿈 입력창"
+                            style="@android:style/Widget.EditText" />
 
                         <!-- 셀카 찍기-->
                         <Button
@@ -175,6 +161,3 @@
 
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>
-
-
-

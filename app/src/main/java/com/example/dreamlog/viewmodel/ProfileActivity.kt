@@ -48,9 +48,9 @@ class ProfileActivity : BaseActivity() {
         db.collection("users").document(uid).get()
             .addOnSuccessListener { doc ->
                 binding.textName.text = doc.getString("name") ?: "User"
-                binding.textPhone.text = doc.getString("phone") ?: "연락처 없음"
-                binding.textEmail.text = FirebaseAuth.getInstance().currentUser?.email ?: "unknown@email.com"
-                binding.textComment.text = doc.getString("comment") ?: "한줄 소개가 없습니다."
+                binding.editPhone.setText(doc.getString("phone") ?: "연락처 없음")
+                binding.editEmail.setText(FirebaseAuth.getInstance().currentUser?.email ?: "unknown@email.com")
+                binding.editComment.setText(doc.getString("comment") ?: "한줄 소개가 없습니다.")
 
                 val imageUrl = doc.getString("profileImageUrl")
                 if (!imageUrl.isNullOrEmpty()) {
