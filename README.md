@@ -2,7 +2,6 @@
   <img src="dreamlog_logo.png" alt="DreamLog Logo" width="200"/>
 </p>
 
-<h1 align="center">🌙 DreamLog</h1>
 <p align="center"><i>당신의 꿈을 기록하고, AI와 함께 분석하며 내면을 탐험하는 안드로이드 앱</i></p>
 
 ---
