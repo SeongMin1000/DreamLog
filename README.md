@@ -17,7 +17,7 @@ DreamLog는 사용자가 간밤의 꿈을 기록하고, AI 기술을 통해 꿈�
   Firebase Authentication을 이용한 사용자 인증 시스템
 
 - 📝 **꿈 기록 및 관리**  
-  꿈의 내용을 텍스트로 입력하고 저장, 목록에서 관리 (생성 / 조회 / 삭제)
+  꿈의 내용을 텍스트와 셀카로 입력하고 저장, 목록에서 관리 (생성 / 조회 / 삭제)
 
 - 🧠 **AI 꿈 분석**  
   OpenAI의 GPT-3.5-turbo 모델로 꿈 내용을 심리학적으로 해석
@@ -98,4 +98,31 @@ dreamlog/
                 ├── values-night/      # 다크 모드 전용 리소스 정의
                 └── mipmap/            # 앱 아이콘 설정
 ```
+---
 
+## 🗂️ Firebase 연동 구조
+
+```plaintext
+[FIREBASE AUTHENTICATION]
+└── UID (user_uid)                      # 인증 고유 식별자
+    ├── email                           # 사용자 이메일
+    └── password (암호화 저장됨)         # 사용자 비밀번호
+
+[FIRESTORE DATABASE]
+└── users/{user_uid}                    # Authentication UID와 동일한 경로
+    ├── userEmail: String               # 사용자 이메일 (Auth의 이메일과 중복 저장)
+    ├── name: String                    # 사용자 이름
+    ├── phone: String                   # 연락처
+    ├── comment: String                 # 한 줄 소개
+    ├── profileImageUrl: String         # Firebase Storage의 프로필 이미지 URL
+    ├── createdAt: Long                 # 가입 시각
+
+    └── dreams/{dream_id}                         # 사용자가 작성한 꿈 데이터
+        ├── dreamText: String                     # 꿈 내용
+        ├── emotion: String                       # 감정 분석 결과
+        ├── gptInterpretation: String             # GPT 꿈 해석 결과
+        ├── imageUrl: String                      # OpenAI 서버의 이미지 URL
+        └── timestamp: Timestamp                  # 기록 시각
+
+[FIREBASE STORAGE]
+└── /profileImages/{user_uid}_myprofile.jpg       # 사용자의 프로필 이미지 파일 경로
